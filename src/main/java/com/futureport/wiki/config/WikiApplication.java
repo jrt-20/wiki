@@ -1,5 +1,6 @@
 package com.futureport.wiki.config;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -8,6 +9,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
 // 手动调整扫描包
 @ComponentScan({"com.futureport"})
+// 扫描mapper
+@MapperScan("com.futureport.wiki.mapper")
 @SpringBootApplication
 public class WikiApplication {
 
