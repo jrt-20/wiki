@@ -1,11 +1,13 @@
-package com.futureport.wiki;
+package com.futureport.wiki.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
-
+// 手动调整扫描包
+@ComponentScan({"com.futureport"})
 @SpringBootApplication
 public class WikiApplication {
 
