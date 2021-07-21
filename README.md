@@ -113,3 +113,34 @@
     edit configurations-->maven-->mybatis-generator:generate -e
 
 * 执行mybatis-generator
+
+# 五、封装请求参数和返回参数
+## 1、封装请求对象Req,选择需要的请求信息,例如Ebook的部分信息(id,name)
+## 2、封装响应对象Resp,选择需要返回给前台的字段信息。
+## 3、根据请求的属性信息,模糊查询，获得List<Ebook>对象,并将Ebook转成EbookResp对象,可以实现隐藏用户的密码信息等功能
+    public List<EbookResp> findAll(EbookReq req){
+        EbookExample example = new EbookExample();
+        EbookExample.Criteria criteria = example.createCriteria();
+        criteria.andNameLike("%"+req.getName()+"%");
+        List<Ebook> list = ebookMapper.selectByExample(example);
+
+        List<EbookResp> lists = new LinkedList<>();
+        /**
+         * 遍历Ebook集合，转成EbookResp
+         */
+        for (Ebook ebook : list) {
+            EbookResp ebookResp = new EbookResp();
+            BeanUtils.copyProperties(ebook,ebookResp);
+            lists.add(ebookResp);
+        }
+        return lists;
+    }
+
+## 4、编写controller层代码,controller层中不出现Ebook等对象
+      @RequestMapping("/list")
+    public CommonResp ebook(EbookReq ebookReq){
+        CommonResp<List<EbookResp>> resp = new CommonResp<>();
+        List<EbookResp> lists =  ebookService.findAll(ebookReq);
+        resp.setContent(lists);
+        return resp;
+    }
