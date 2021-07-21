@@ -5,3 +5,7 @@ Accept:application/json
 
 GET http://localhost/mybatis
 Accept:application/json
+
+###
+GET http://localhost/ebook/list
+Accept:application/json
