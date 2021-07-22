@@ -8,6 +8,7 @@ import com.futureport.wiki.resp.EbookResp;
 import com.futureport.wiki.utils.CopyUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
 import java.util.LinkedList;
@@ -21,7 +22,10 @@ public class EbookService {
     public List<EbookResp> findAll(EbookReq req){
         EbookExample example = new EbookExample();
         EbookExample.Criteria criteria = example.createCriteria();
-        criteria.andNameLike("%"+req.getName()+"%");
+
+        if(!ObjectUtils.isEmpty(req.getName())){
+            criteria.andNameLike("%"+req.getName()+"%");
+        }
         List<Ebook> list = ebookMapper.selectByExample(example);
 
 //        List<EbookResp> lists = new LinkedList<>();

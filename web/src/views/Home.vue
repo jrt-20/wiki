@@ -98,7 +98,7 @@ export default defineComponent({
     let ebooks1 = reactive({books:[]});
 
     onMounted(()=>{
-      axios.get("http://localhost/ebook/list?name=Python").then(function (response){
+      axios.get("http://localhost/ebook/list?").then(function (response){
         const data = response.data;
         ebooks.value = data.content;
         ebooks1.books = data.content;
@@ -114,7 +114,7 @@ export default defineComponent({
         onChange: (page: any) => {
           console.log(page);
         },
-        pageSize: 3
+        pageSize: 12
       },
       actions: [
         { type: 'StarOutlined', text: '156' },
@@ -125,3 +125,14 @@ export default defineComponent({
   },
 });
 </script>
+
+
+<style scoped>
+  .ant-avatar {
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    border-radius: 8%;
+    margin: 5px 0;
+  }
+</style>
