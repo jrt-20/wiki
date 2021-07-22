@@ -1,6 +1,5 @@
 <template>
   <a-layout id="components-layout-demo-top-side-2">
-
     <the-header/>
     <router-view/>
     <the-footer/>
@@ -10,11 +9,15 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+
+import {Layout} from 'ant-design-vue';
 import TheHeader from '@/components/the-header.vue';
 import TheFooter from '@/components/the-footer.vue';
 export default defineComponent({
   name: 'app',
   components:{
+    aLayout:Layout,
+    aLayoutContent:Layout.Content,
     TheHeader,
     TheFooter,
   },
