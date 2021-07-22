@@ -1,5 +1,5 @@
 <template>
-  <a-layout id="components-layout-demo-top-side-2">
+  <a-layout id="components-layout-demo-top-side-2" class="ant-layout">
     <the-header/>
     <router-view/>
     <the-footer/>
