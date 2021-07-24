@@ -1,6 +1,6 @@
-package com.futureport.wiki.resp;
+package com.futureport.wiki.req;
 
-public class EbookResp {
+public class EbookQueryReq extends PageReq{
     private Long id;
 
     private String name;

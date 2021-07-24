@@ -138,9 +138,9 @@
 
 ## 4、编写controller层代码,controller层中不出现Ebook等对象
       @RequestMapping("/list")
-    public CommonResp ebook(EbookReq ebookReq){
+    public CommonResp ebook(EbookReq ebookQueryReq){
         CommonResp<List<EbookResp>> resp = new CommonResp<>();
-        List<EbookResp> lists =  ebookService.findAll(ebookReq);
+        List<EbookResp> lists =  ebookService.findAll(ebookQueryReq);
         resp.setContent(lists);
         return resp;
     }

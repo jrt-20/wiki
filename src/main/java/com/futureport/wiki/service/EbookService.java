@@ -3,8 +3,9 @@ package com.futureport.wiki.service;
 import com.futureport.wiki.entity.Ebook;
 import com.futureport.wiki.entity.EbookExample;
 import com.futureport.wiki.mapper.EbookMapper;
-import com.futureport.wiki.req.EbookReq;
-import com.futureport.wiki.resp.EbookResp;
+import com.futureport.wiki.req.EbookQueryReq;
+import com.futureport.wiki.req.EbookSaveReq;
+import com.futureport.wiki.resp.EbookQueryResp;
 import com.futureport.wiki.resp.PageResp;
 import com.futureport.wiki.utils.CopyUtil;
 import com.github.pagehelper.PageHelper;
@@ -25,7 +26,7 @@ public class EbookService {
     @Resource
     private EbookMapper ebookMapper;
 
-    public PageResp<EbookResp> findAll(EbookReq req){
+    public PageResp<EbookQueryResp> findAll(EbookQueryReq req){
 
 
         EbookExample example = new EbookExample();
@@ -61,14 +62,28 @@ public class EbookService {
 
 
         //列表复制
-        List<EbookResp> lists = CopyUtil.copyList(list, EbookResp.class);
+        List<EbookQueryResp> lists = CopyUtil.copyList(list, EbookQueryResp.class);
 
         //返回新的带分页参数的对象
-        PageResp<EbookResp> PageResp = new PageResp<EbookResp>();
+        PageResp<EbookQueryResp> PageResp = new PageResp<EbookQueryResp>();
 
         PageResp.setTotal(pageInfo.getTotal());
         PageResp.setList(lists);
 
         return PageResp;
+    }
+
+    /**
+     * 保存
+     */
+    public void save(EbookSaveReq req){
+        //单体复制
+        Ebook ebook = CopyUtil.copy(req,Ebook.class);
+        if(!ObjectUtils.isEmpty(req.getId())){
+            ebookMapper.updateByPrimaryKey(ebook);
+        }else {
+            ebookMapper.insert(ebook);
+        }
+
     }
 }
