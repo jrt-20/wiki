@@ -7,5 +7,5 @@ GET http://localhost/mybatis
 Accept:application/json
 
 ###
-GET http://localhost/ebook/list?page=1&size=4
+GET http://localhost/ebook/list?page=1&size=1001
 Accept:application/json

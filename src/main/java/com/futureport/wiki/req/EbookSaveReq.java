@@ -1,8 +1,11 @@
 package com.futureport.wiki.req;
 
+import javax.validation.constraints.NotNull;
+
 public class EbookSaveReq {
     private Long id;
 
+    @NotNull(message = "[name]不能为空")
     private String name;
 
     private Long category1Id;

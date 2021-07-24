@@ -9,6 +9,8 @@ import com.futureport.wiki.service.EbookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/ebook")
 public class EbookController {
@@ -17,7 +19,7 @@ public class EbookController {
     private EbookService ebookService;
 
     @RequestMapping("/list")
-    public CommonResp ebook(EbookQueryReq ebookQueryReq){
+    public CommonResp ebook(@Valid EbookQueryReq ebookQueryReq){
         CommonResp<PageResp<EbookQueryResp>> resp = new CommonResp<>();
         PageResp<EbookQueryResp> lists =  ebookService.findAll(ebookQueryReq);
         resp.setContent(lists);
@@ -25,7 +27,7 @@ public class EbookController {
     }
 
     @PostMapping("/save")
-    public CommonResp save(@RequestBody EbookSaveReq ebookSaveReq){
+    public CommonResp save(@Valid @RequestBody EbookSaveReq ebookSaveReq){
         CommonResp resp = new CommonResp<>();
         ebookService.save(ebookSaveReq);
         return resp;
