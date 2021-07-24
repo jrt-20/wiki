@@ -4,6 +4,9 @@
   <a-layout class="ant-layout-has-sider ant-layout">
 
     <a-layout-content style="background:#fff;padding:24px;margin: 0;minHeight:280px" class="ant-layout-content">
+    <p>
+      <a-button type="primary" @click="add()" size="large">添加</a-button>
+    </p>
 
       <a-table
           :columns="columns"
@@ -176,6 +179,13 @@ export default defineComponent({
       ebook.value = record;
     }
 
+    //添加
+    const add = () => {
+      modalVisible.value = true;
+      ebook.value = {};
+    }
+
+
 
 
     onMounted(() => {
@@ -195,6 +205,7 @@ export default defineComponent({
       loading,
       handleTableChange,
       edit,
+      add,
       ebook,
       modalVisible,
       modalLoading,
