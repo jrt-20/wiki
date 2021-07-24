@@ -5,17 +5,16 @@ import com.futureport.wiki.entity.EbookExample;
 import com.futureport.wiki.mapper.EbookMapper;
 import com.futureport.wiki.req.EbookReq;
 import com.futureport.wiki.resp.EbookResp;
+import com.futureport.wiki.resp.PageResp;
 import com.futureport.wiki.utils.CopyUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
-import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -26,7 +25,7 @@ public class EbookService {
     @Resource
     private EbookMapper ebookMapper;
 
-    public List<EbookResp> findAll(EbookReq req){
+    public PageResp<EbookResp> findAll(EbookReq req){
 
 
         EbookExample example = new EbookExample();
@@ -38,7 +37,10 @@ public class EbookService {
         /**
          * 开启分页
          */
-        PageHelper.startPage(1,3);
+        LOG.info("req:{}",req.getPage());
+        LOG.info("req:{}",req.getSize());
+
+        PageHelper.startPage(req.getPage(),req.getSize());
         List<Ebook> list = ebookMapper.selectByExample(example);
         PageInfo<Ebook> pageInfo = new PageInfo<>(list);
 
@@ -57,8 +59,16 @@ public class EbookService {
 //        }
 //        return lists;
 
+
         //列表复制
         List<EbookResp> lists = CopyUtil.copyList(list, EbookResp.class);
-        return lists;
+
+        //返回新的带分页参数的对象
+        PageResp<EbookResp> PageResp = new PageResp<EbookResp>();
+
+        PageResp.setTotal(pageInfo.getTotal());
+        PageResp.setList(lists);
+
+        return PageResp;
     }
 }
