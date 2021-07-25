@@ -34,6 +34,7 @@ public class CategoryService {
 
 
         CategoryExample example = new CategoryExample();
+        example.setOrderByClause("sort asc");
         CategoryExample.Criteria criteria = example.createCriteria();
 
 //        if(!ObjectUtils.isEmpty(req.getName())){
@@ -97,6 +98,20 @@ public class CategoryService {
      */
     public void delete(long id){
         categoryMapper.deleteByPrimaryKey(id);
+
+    }
+
+
+    public List<CategoryQueryResp> all(){
+
+
+        CategoryExample example = new CategoryExample();
+        example.setOrderByClause("sort asc");
+        List<Category> list = categoryMapper.selectByExample(example);
+
+        //列表复制
+        List<CategoryQueryResp> lists = CopyUtil.copyList(list, CategoryQueryResp.class);
+        return lists;
 
     }
 }
