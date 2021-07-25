@@ -5,7 +5,7 @@
 
     <a-layout-content style="background:#fff;padding:24px;margin: 0;minHeight:280px" class="ant-layout-content">
     <p>
-      <a-form layout="inline" :model="param">
+      <a-form :model="param" layout="inline">
         <a-form-item>
           <a-button type="primary" @click="handleQuery()">
             查询
@@ -58,14 +58,24 @@
       :confirm-loading="modalLoading"
       @ok="handleModalOK"
   >
-    <a-form :model="category" :label-col="{ span: 6 }">
+    <a-form :label-col="{ span: 6 }" :model="category">
       <a-form-item label="名称">
         <a-input v-model:value="category.name"/>
       </a-form-item>
       <a-form-item label="父分类">
-        <a-input v-model:value="category.parent"/>
+        <a-select
+            ref="select"
+            v-model:value="category.parent"
+        >
+          <a-select-option value="0">
+            无
+          </a-select-option>
+          <a-select-option v-for="c in level1" :key="c.id" :value="c.id" :disabled="category.id === c.id">
+            {{c.name}}
+          </a-select-option>
+        </a-select>
       </a-form-item>
-      <a-form-item label="子分类">
+      <a-form-item label="顺序">
         <a-input v-model:value="category.sort"/>
       </a-form-item>
     </a-form>
