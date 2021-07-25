@@ -253,6 +253,12 @@ export default defineComponent({
           level1.value = []
           level1.value = Tool.array2Tree(categorys, 0);
           console.log('树形结构', level1.value);
+          handleQuery({
+            //要求请求参数的对象EbookReq的page，size一样
+            page:1,
+            size: pagination.value.pageSize,
+
+          });
         } else {
           message.error(data.message);
         }
@@ -276,13 +282,6 @@ export default defineComponent({
 
     onMounted(() => {
       handleQueryCategory();
-      handleQuery({
-        //要求请求参数的对象EbookReq的page，size一样
-        page:1,
-        size: pagination.value.pageSize,
-
-      });
-
 
     });
 

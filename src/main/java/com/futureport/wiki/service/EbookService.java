@@ -39,6 +39,9 @@ public class EbookService {
         if(!ObjectUtils.isEmpty(req.getName())){
             criteria.andNameLike("%"+req.getName()+"%");
         }
+        if (!ObjectUtils.isEmpty(req.getCategory2Id())) {
+            criteria.andCategory2IdEqualTo(req.getCategory2Id());
+        }
         /**
          * 开启分页
          */
