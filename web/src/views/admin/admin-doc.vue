@@ -290,7 +290,8 @@ export default defineComponent({
 
     //删除
     const handleDelete = (id: number) => {
-
+      ids.length = 0;
+      console.log('ids', ids);
       getDeleteIds(level1.value, id);
       axios.delete("/doc/delete/" + ids.join(',')).then((response) => {
         const data = response.data; // data => CommonResp
