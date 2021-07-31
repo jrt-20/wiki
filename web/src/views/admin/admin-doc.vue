@@ -21,6 +21,7 @@
             </a-form>
           </p>
           <a-table
+              v-if="level1.length > 0"
               :columns="columns"
               :data-source="level1"
               :loading="loading"
@@ -28,6 +29,7 @@
               size="small"
               :row-key="record => record.id"
               @change="handleTableChange"
+              :defaultExpandAllRows="true"
           >
             <template #name="{ text, record }">
               {{ record.sort }} {{ text }}
@@ -168,6 +170,7 @@ export default defineComponent({
       }
     ];
 
+    level1.value = [];
     /**
      * 数据查询
      **/
@@ -194,16 +197,18 @@ export default defineComponent({
 
 
     //表单
-    const doc = ref({});
+    const doc = ref();
+    doc.value = {};
     const modalVisible = ref(false);
     const modalLoading = ref(false);
     // 因为树选择组件的树形状态，会随当前编辑的节点变化，所以单独声明一个响应式变量
     const treeSelectData = ref();
     treeSelectData.value = [];
-    let editor;
+    let editor: any;
 
     const handleSave = () => {
       modalLoading.value = true;
+      doc.value.content = editor.txt.html();
       axios.post("/doc/save", doc.value).then((response) => {
         modalLoading.value = false;
         const data = response.data; // data => CommonResp

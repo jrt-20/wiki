@@ -1,7 +1,9 @@
 package com.futureport.wiki.service;
 
+import com.futureport.wiki.entity.Content;
 import com.futureport.wiki.entity.Doc;
 import com.futureport.wiki.entity.DocExample;
+import com.futureport.wiki.mapper.ContentMapper;
 import com.futureport.wiki.mapper.DocMapper;
 import com.futureport.wiki.req.DocQueryReq;
 import com.futureport.wiki.req.DocSaveReq;
@@ -29,6 +31,9 @@ public class DocService {
 
     @Resource
     private SnowFlake snowFlake;
+
+    @Resource
+    private ContentMapper contentMapper;
 
     public PageResp<DocQueryResp> findAll(DocQueryReq req){
 
@@ -83,12 +88,20 @@ public class DocService {
      */
     public void save(DocSaveReq req){
         //单体复制
-        Doc Doc = CopyUtil.copy(req,Doc.class);
+        Doc doc = CopyUtil.copy(req,Doc.class);
+        Content content = CopyUtil.copy(req,Content.class);
+        //更新
         if(!ObjectUtils.isEmpty(req.getId())){
-            docMapper.updateByPrimaryKey(Doc);
+            docMapper.updateByPrimaryKey(doc);
+            int count = contentMapper.updateByPrimaryKeyWithBLOBs(content);
+            if (count == 0) {
+                contentMapper.insert(content);
+            }
         }else {
-            Doc.setId(snowFlake.nextId());
-            docMapper.insert(Doc);
+            doc.setId(snowFlake.nextId());
+            docMapper.insert(doc);
+            content.setId(doc.getId());
+            contentMapper.insert(content);
         }
 
     }
