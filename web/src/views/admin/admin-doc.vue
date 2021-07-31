@@ -216,7 +216,9 @@ export default defineComponent({
 
     //表单
     const doc = ref();
-    doc.value = {};
+    doc.value = {
+      ebookId: route.query.ebookId
+    };
     const modalVisible = ref(false);
     const modalLoading = ref(false);
     // 因为树选择组件的树形状态，会随当前编辑的节点变化，所以单独声明一个响应式变量
