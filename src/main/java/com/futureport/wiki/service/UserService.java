@@ -137,4 +137,12 @@ public class UserService {
             }
         }
     }
+
+    /**
+     * 修改密码
+     */
+    public void restPassword(UserResetPasswordReq req) {
+        User user = CopyUtil.copy(req, User.class);
+        userMapper.updateByPrimaryKeySelective(user);
+    }
 }

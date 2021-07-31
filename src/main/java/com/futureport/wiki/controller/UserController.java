@@ -89,4 +89,5 @@ public class UserController {
         LOG.info("从redis中删除token: {}", token);
         return resp;
     }
+
 }
