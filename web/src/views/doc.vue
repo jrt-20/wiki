@@ -1,6 +1,7 @@
 <template>
   <a-layout>
     <a-layout-content :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }">
+      <h3 v-if="level1.length === 0">对不起，找不到相关文档！</h3>
       <a-row>
         <a-col :span="6">
           <a-tree
@@ -9,6 +10,7 @@
               :replace-fields="{title: 'name', key: 'id', value: 'id'}"
               :tree-data="level1"
               @select="onSelect"
+              :defaultSelectedKeys="defaultSelectedKeys"
           >
           </a-tree>
         </a-col>
@@ -33,6 +35,8 @@ export default defineComponent({
     const route = useRoute();
     const docs = ref();
     const html = ref();
+    const defaultSelectedKeys = ref();
+    defaultSelectedKeys.value = [];
     /**
      * 一级文档树，children 属性就是二级文档
      * [{
@@ -48,13 +52,11 @@ export default defineComponent({
     /**
      * 数据查询
      */
-    const handleQuery = () => {
-      axios.get('/doc/all/' + route.query.ebookId).then((response) => {
+    const handleQueryContent = (id: number) => {
+      axios.get('/doc/find-content/' + id).then((response) => {
         const data = response.data;
         if (data.success) {
-          docs.value = data.content;
-          level1.value = [];
-          level1.value = Tool.array2Tree(docs.value, 0);
+          html.value = data.content;
         } else {
           message.error(data.message);
         }
@@ -64,11 +66,18 @@ export default defineComponent({
     /**
      * 内容查询
      */
-    const handleQueryContent = (id: number) => {
-      axios.get('/doc/find-content/' + id).then((response) => {
+    const handleQuery = () => {
+      axios.get('/doc/all/' + route.query.ebookId).then((response) => {
         const data = response.data;
         if (data.success) {
-          html.value = data.content;
+          docs.value = data.content;
+          level1.value = [];
+          level1.value = Tool.array2Tree(docs.value, 0);
+          if (Tool.isNotEmpty(level1)) {
+            const id = level1.value[0].id;
+            defaultSelectedKeys.value = [id];
+            handleQueryContent(id);
+          }
         } else {
           message.error(data.message);
         }
@@ -90,6 +99,7 @@ export default defineComponent({
       level1,
       html,
       onSelect,
+      defaultSelectedKeys,
     }
   }
 });
