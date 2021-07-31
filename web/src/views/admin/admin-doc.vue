@@ -38,7 +38,7 @@
                 title="删除后不可恢复，确认删除？"
                 ok-text="是"
                 cancel-text="否 "
-                @confirm="handleDelete(record.id)"
+                @confirm="showConfirm(record.id)"
             >
               <a-button type="danger">
                 删除
@@ -100,7 +100,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue';
 import axios from 'axios';
-import {message} from 'ant-design-vue';
+import {message, Modal} from 'ant-design-vue'
 import {Tool} from '@/util/tool';
 import {useRoute} from "vue-router";
 
@@ -233,6 +233,7 @@ export default defineComponent({
     }
 
     const ids: Array<string> = [];
+    const names: Array<string> = [];
     /**
      * 查找整根树枝
      */
@@ -247,6 +248,7 @@ export default defineComponent({
           // 将目标 id 放入结果集 ids 中
           // node.disabled = true;
           ids.push(id);
+          names.push(node.name);
           // 遍历所有子节点
           const children = node.children;
           if (Tool.isNotEmpty(children)) {
@@ -302,6 +304,23 @@ export default defineComponent({
       });
     }
 
+    const showConfirm = (id: number) => {
+      ids.length = 0;
+      names.length = 0;
+      getDeleteIds(level1.value, id);
+      Modal.confirm({
+        title: '重要提醒',
+        // icon: ExclamationCircleOutlined,
+        content: '将删除：【' + names.join('，') + '】，删除后不可恢复。确认删除？',
+        onOk() {
+          handleDelete(id);
+        },
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        onCancel() {
+        },
+      });
+    }
+
 
 
 
@@ -330,6 +349,7 @@ export default defineComponent({
       handleDelete,
       handleQuery,
       treeSelectData,
+      showConfirm,
     }
   }
 });
