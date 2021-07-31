@@ -70,7 +70,8 @@
       <a-form-item label="名称">
         <a-input v-model:value="user.name"/>
       </a-form-item>
-      <a-form-item label="密码">
+<!--      拒绝修改密码-->
+      <a-form-item v-show="!user.id" label="密码">
         <a-input v-model:value="user.password" type="text"/>
       </a-form-item>
     </a-form>
