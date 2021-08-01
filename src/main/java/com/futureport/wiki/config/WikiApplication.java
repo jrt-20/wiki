@@ -7,11 +7,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.EnableScheduling;
+
 // 手动调整扫描包
 @ComponentScan({"com.futureport"})
 // 扫描mapper
 @MapperScan("com.futureport.wiki.mapper")
 @SpringBootApplication
+@EnableScheduling
 public class WikiApplication {
 
     private static final Logger LOG = LoggerFactory.getLogger(WikiApplication.class);
