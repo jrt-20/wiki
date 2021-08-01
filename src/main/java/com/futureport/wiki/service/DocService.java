@@ -16,6 +16,7 @@ import com.futureport.wiki.utils.CopyUtil;
 import com.futureport.wiki.utils.RedisUtil;
 import com.futureport.wiki.utils.RequestContext;
 import com.futureport.wiki.utils.SnowFlake;
+import com.futureport.wiki.websocket.WebSocketServer;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -36,6 +37,9 @@ public class DocService {
 
     @Resource
     private DocMapperCust docMapperCust;
+
+    @Resource
+    private WebSocketServer webSocketServe;
 
     @Resource
     private SnowFlake snowFlake;
@@ -167,6 +171,10 @@ public class DocService {
         } else {
             throw new BusinessException(BusinessExceptionCode.VOTE_REPEAT);
         }
+
+        //推送消息
+        Doc docDb = docMapper.selectByPrimaryKey(id);
+        webSocketServe.sendInfo("【"+docDb.getName()+"】被点赞!");
     }
 
     public void updateEbookInfo(){
