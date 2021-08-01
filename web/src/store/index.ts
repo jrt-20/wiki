@@ -1,10 +1,12 @@
 import { createStore } from 'vuex'
 
-declare let SessionStorage:any
-const USER="USER"
+declare let SessionStorage:any;
+const USER="USER";
+
+
 const store=createStore({
   state: {
-    user:SessionStorage.get(USER)||{}
+    user:SessionStorage.get(USER) || {}
   },
   mutations: {
     setUser(state,user) {
@@ -17,5 +19,4 @@ const store=createStore({
   modules: {
   }
 })
-
 export default store

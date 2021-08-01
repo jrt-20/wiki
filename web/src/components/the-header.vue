@@ -63,7 +63,8 @@ declare let KEY: any
 export default defineComponent({
   name: 'the-header',
   setup() {
-    const user=computed(()=> store.state.user)
+
+    const user=computed(()=> store.state.user);
 
     const loginUser = ref({
       loginName: "t2",
@@ -78,6 +79,7 @@ export default defineComponent({
     // 登录
     const login = () => {
       console.log("开始登录");
+
       loginModalLoading.value = true;
       loginUser.value.password = hexMd5(loginUser.value.password + KEY);
       axios.post('/user/login', loginUser.value).then((response) => {
@@ -86,14 +88,15 @@ export default defineComponent({
         if (data.success) {
           loginModalVisible.value = false;
           message.success("登录成功！");
-          store.commit("setUser",user.value)
+          console.log(data.content);
+          console.log(user.value);
+          store.commit("setUser",data.content);
+          console.log(user);
         } else {
           message.error(data.message);
         }
       });
     };
-
-
     return {
       loginModalVisible,
       loginModalLoading,
