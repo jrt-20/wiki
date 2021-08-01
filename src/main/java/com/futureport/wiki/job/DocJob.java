@@ -21,6 +21,8 @@ public class DocJob {
     @Resource
     private SnowFlake snowFlake;
 
+
+
     /**
      * 每30秒更新电子书信息
      */
