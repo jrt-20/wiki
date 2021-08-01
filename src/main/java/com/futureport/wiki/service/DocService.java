@@ -3,6 +3,8 @@ package com.futureport.wiki.service;
 import com.futureport.wiki.entity.Content;
 import com.futureport.wiki.entity.Doc;
 import com.futureport.wiki.entity.DocExample;
+import com.futureport.wiki.except.BusinessException;
+import com.futureport.wiki.except.BusinessExceptionCode;
 import com.futureport.wiki.mapper.ContentMapper;
 import com.futureport.wiki.mapper.DocMapper;
 import com.futureport.wiki.mapper.DocMapperCust;
@@ -11,6 +13,8 @@ import com.futureport.wiki.req.DocSaveReq;
 import com.futureport.wiki.resp.DocQueryResp;
 import com.futureport.wiki.resp.PageResp;
 import com.futureport.wiki.utils.CopyUtil;
+import com.futureport.wiki.utils.RedisUtil;
+import com.futureport.wiki.utils.RequestContext;
 import com.futureport.wiki.utils.SnowFlake;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -38,6 +42,9 @@ public class DocService {
 
     @Resource
     private ContentMapper contentMapper;
+
+    @Resource
+    private RedisUtil redisUtil;
 
     public PageResp<DocQueryResp> findAll(DocQueryReq req){
 
@@ -151,6 +158,16 @@ public class DocService {
         return content.getContent();
     }
 
+    public void vote(Long id) {
+        // docMapperCust.increaseVoteCount(id);
+        // 远程IP+doc.id作为key，24小时内不能重复
+        String ip = RequestContext.getRemoteAddr();
+        if (redisUtil.validateRepeat("DOC_VOTE_" + id + "_" + ip, 3600 * 24)) {
+            docMapperCust.increaseVoteCount(id);
+        } else {
+            throw new BusinessException(BusinessExceptionCode.VOTE_REPEAT);
+        }
+    }
 
 
 }
