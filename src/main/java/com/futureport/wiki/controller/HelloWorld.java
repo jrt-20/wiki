@@ -14,6 +14,7 @@ import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
 @RestController
+@RequestMapping("/test")
 public class HelloWorld {
 
     @Resource

@@ -11,5 +11,9 @@ GET http://localhost/ebook/list?page=1&size=1001
 Accept:application/json
 
 ###
-GET http://localhost/test/redis/set/1232242342/test
+GET http://localhost/test/redis/set/66014920772292608/test
+Accept: application/json
+
+###
+GET http://localhost/test/redis/get/66014920772292608
 Accept: application/json
