@@ -9,3 +9,7 @@ Accept:application/json
 ###
 GET http://localhost/ebook/list?page=1&size=1001
 Accept:application/json
+
+###
+GET http://localhost/test/redis/set/1232242342/test
+Accept: application/json

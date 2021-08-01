@@ -2,29 +2,36 @@ package com.futureport.wiki.controller;
 
 import com.futureport.wiki.entity.Test;
 import com.futureport.wiki.service.TestService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 public class HelloWorld {
 
     @Resource
-    private TestService testService;
+    RedisTemplate redisTemplate;
 
-    @Value("${test.hello}")
-    private String test;
+    private static final Logger LOG = LoggerFactory.getLogger(HelloWorld.class);
 
-    @RequestMapping("/hello")
-    public String hello(){
-        String str = "hello,world"+test;
-        return str;
+    @RequestMapping("/redis/set/{key}/{value}")
+    public String set(@PathVariable String key, @PathVariable String value) {
+        redisTemplate.opsForValue().set(key, value, 3600, TimeUnit.SECONDS);
+        LOG.info("key: {}, value: {}", key, value);
+        return "success";
     }
 
-    @RequestMapping("/mybatis")
-    public Test mybatis(){
-        return testService.list();
+    @RequestMapping("/redis/get/{key}")
+    public Object get(@PathVariable String key) {
+        Object object = redisTemplate.opsForValue().get(key);
+        LOG.info("key: {}, value: {}", key, object);
+        return object;
     }
 }
