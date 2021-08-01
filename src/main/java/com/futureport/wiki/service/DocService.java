@@ -5,6 +5,7 @@ import com.futureport.wiki.entity.Doc;
 import com.futureport.wiki.entity.DocExample;
 import com.futureport.wiki.mapper.ContentMapper;
 import com.futureport.wiki.mapper.DocMapper;
+import com.futureport.wiki.mapper.DocMapperCust;
 import com.futureport.wiki.req.DocQueryReq;
 import com.futureport.wiki.req.DocSaveReq;
 import com.futureport.wiki.resp.DocQueryResp;
@@ -28,6 +29,9 @@ public class DocService {
 
     @Resource
     private DocMapper docMapper;
+
+    @Resource
+    private DocMapperCust docMapperCust;
 
     @Resource
     private SnowFlake snowFlake;
@@ -98,7 +102,11 @@ public class DocService {
                 contentMapper.insert(content);
             }
         }else {
+            //新增
             doc.setId(snowFlake.nextId());
+            doc.setViewCount(0);
+            doc.setVoteCount(0);
+
             docMapper.insert(doc);
             content.setId(doc.getId());
             contentMapper.insert(content);
@@ -135,9 +143,14 @@ public class DocService {
 
     public String findContent(Long id) {
         Content content = contentMapper.selectByPrimaryKey(id);
+        //文档阅读数+1
+        docMapperCust.increaseViewCount(id);
         if (ObjectUtils.isEmpty(content)) {
             return "";
         }
         return content.getContent();
     }
+
+
+
 }
