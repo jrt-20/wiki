@@ -39,7 +39,7 @@ public class DocService {
     private DocMapperCust docMapperCust;
 
     @Resource
-    private WebSocketServer webSocketServe;
+    private WsService wsService;
 
     @Resource
     private SnowFlake snowFlake;
@@ -174,7 +174,7 @@ public class DocService {
 
         //推送消息
         Doc docDb = docMapper.selectByPrimaryKey(id);
-        webSocketServe.sendInfo("【"+docDb.getName()+"】被点赞!");
+        wsService.sendInfo("【"+docDb.getName()+"】被点赞!");
     }
 
     public void updateEbookInfo(){
