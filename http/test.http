@@ -7,7 +7,7 @@ GET http://localhost/mybatis
 Accept:application/json
 
 ###
-GET http://localhost/ebook/list?page=1&size=1001
+POST http://localhost/ebook/save
 Accept:application/json
 
 ###
