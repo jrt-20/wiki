@@ -19,9 +19,11 @@ import com.futureport.wiki.utils.SnowFlake;
 import com.futureport.wiki.websocket.WebSocketServer;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -169,7 +171,7 @@ public class DocService {
         // docMapperCust.increaseVoteCount(id);
         // 远程IP+doc.id作为key，24小时内不能重复
         String ip = RequestContext.getRemoteAddr();
-        if (redisUtil.validateRepeat("DOC_VOTE_" + id + "_" + ip, 3600 * 24)) {
+        if (redisUtil.validateRepeat("DOC_VOTE_" + id + "_" + ip, 5)) {
             docMapperCust.increaseVoteCount(id);
         } else {
             throw new BusinessException(BusinessExceptionCode.VOTE_REPEAT);
